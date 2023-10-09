@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webchat development</title>
+    <link rel="stylesheet" type="text/css" href="https://staticwebtest0.blob.core.windows.net/$web/css/chatbot.css" />
+</head>
+
+<body>
+    <div class="chat">
+        <div id="chatbot" data-url="https://endpoint-app.cognigy.ai/18afa01a18156d5f30feee66459196a8d85e57e11d88ac85623bbf54a511678f"></div>
+        <script src="https://github.com/Cognigy/WebchatWidget/releases/download/v2.20.0/webchat.legacy.js"></script>
+        </div>
+        <script>
+        var loadHeaderProfile = function loadHeaderProfile() {
+    var dealerNumber="2198";       
+      	return dealerNumber;
+    }();
+
+var init = function init() {
+
+    const objc = document.querySelector('#chatbot');
+    var url = "https://endpoint-app.cognigy.ai/18afa01a18156d5f30feee66459196a8d85e57e11d88ac85623bbf54a511678f";
+	initWebchat(url).then(function (webchat) {
+
+				// use the webchat as an object
+				window.webchat = webchat;
+
+				// create a counter at this scope
+				let counter = 0;
+				// add the event listener and action to webchat object for the "open" event
+				webchat.registerAnalyticsService(function(event) 
+			{
+				// if counter is 0 run the code, else do nothing
+				if (counter === 0)
+					{	
+						if (event.type === "webchat/open") 
+						{
+							// get dealer number from tag
+							const dn_cog = loadHeaderProfile;
+							// send the webchat the dn_cog value as an input message for conversation use
+                            webchat.sendMessage("", {
+										dn_hdnet: dn_cog
+												});
+							// increment counter to avoid sending this message n times webchat is opened in the session
+							counter++;
+						}		
+					}
+							
+			});
+
+
+	});
+
+  };
+
+
+$(document).ready(function () {
+
+    init();
+
+});
+        </script>
+</body>
+
+</html>
